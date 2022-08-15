@@ -63,6 +63,8 @@ namespace YAFC.Model
         public static FavouritesComparer<Goods> FavouriteFuel { get; private set; }
         public static FavouritesComparer<EntityCrafter> FavouriteCrafter { get; private set; }
         public static FavouritesComparer<Item> FavouriteModule { get; private set; }
+        public static FavouritesComparer<Recipe> FavouriteRecipe { get; private set; }
+        public static FavouritesComparerFactory<Recipe> FavouriteRecipeFactory { get; private set; }
         
         public static readonly IComparer<FactorioObject> DeterministicComparer = new FactorioObjectDeterministicComparer();
         public static readonly IComparer<Fluid> FluidTemperatureComparer = new FluidTemperatureComparerImp();
@@ -121,6 +123,8 @@ namespace YAFC.Model
             FavouriteFuel = new FavouritesComparer<Goods>(project, FuelOrdering);
             FavouriteCrafter = new FavouritesComparer<EntityCrafter>(project, CrafterOrdering);
             FavouriteModule = new FavouritesComparer<Item>(project, DefaultOrdering);
+            FavouriteRecipe = new FavouritesComparer<Recipe>(project, DefaultRecipeOrdering);
+            FavouriteRecipeFactory = new FavouritesComparerFactory<Recipe>(project);
         }
 
         private class FactorioObjectDeterministicComparer : IComparer<FactorioObject>
@@ -290,9 +294,23 @@ namespace YAFC.Model
             return amount;
         }
 
-        public static FactorioObjectComparer<Recipe> GetRecipeComparerFor(Goods goods)
+        public class FavouritesComparerFactory<T> where T : FactorioObject
         {
-            return new FactorioObjectComparer<Recipe>((x, y) => (x.Cost(true)/x.GetProduction(goods)).CompareTo(y.Cost(true)/y.GetProduction(goods)));
+            private readonly Project project;
+            public FavouritesComparerFactory(Project project)
+            {
+                this.project = project;
+            }
+
+            public FavouritesComparer<T> Create(IComparer<T> def)
+            {
+                return new FavouritesComparer<T>(project, def);
+            }
+        }
+
+        public static FavouritesComparer<Recipe> GetRecipeComparerFor(Goods goods)
+        {
+            return FavouriteRecipeFactory.Create(new FactorioObjectComparer<Recipe>((x, y) => (x.Cost(true)/x.GetProduction(goods)).CompareTo(y.Cost(true)/y.GetProduction(goods))));
         }
 
         public static Icon NoFuelIcon;

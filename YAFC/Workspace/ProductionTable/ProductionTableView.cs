@@ -710,7 +710,7 @@ namespace YAFC
                 }
 
                 if (type != ProductDropdownType.Fuel && goods != null &&  type != ProductDropdownType.Ingredient && goods.usages.Length > 0)
-                    gui.BuildInlineObejctListAndButton(goods.usages, DataUtils.DefaultRecipeOrdering, addRecipe, "Add consumption recipe", type == ProductDropdownType.Product ? 6 : 3, true, recipeExists);
+                    gui.BuildInlineObejctListAndButton(goods.usages, DataUtils.FavouriteRecipe, addRecipe, "Add consumption recipe", type == ProductDropdownType.Product ? 6 : 3, true, recipeExists);
                 
                 if (type == ProductDropdownType.Product && goods != null && allProduction.Length > 0)
                     gui.BuildInlineObejctListAndButton(allProduction, comparer, addRecipe, "Add production recipe", 1, true, recipeExists);
