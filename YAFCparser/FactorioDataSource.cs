@@ -238,7 +238,7 @@ namespace YAFC.Parser
 
                 if (locale != null)
                 {
-                    foreach (var mod in modLoadOrder)
+                    foreach (var mod in modLoadOrder.Reverse())
                     {
                         currentLoadingMod = mod;
                         LoadModLocale(mod, locale);
@@ -247,7 +247,7 @@ namespace YAFC.Parser
                 // Fill the rest of the locale keys from english
                 if (locale != "en")
                 {
-                    foreach (var mod in modLoadOrder)
+                    foreach (var mod in modLoadOrder.Reverse())
                     {
                         currentLoadingMod = mod;
                         LoadModLocale(mod, "en");
