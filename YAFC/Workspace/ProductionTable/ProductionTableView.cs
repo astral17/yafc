@@ -301,7 +301,7 @@ namespace YAFC
             {
                 if (gui.BuildButton("Mass set assembler") && gui.CloseDropdown())
                 {
-                    SelectObjectPanel.Select(Database.allCrafters, "Set assembler for all recipes", set =>
+                    SelectObjectPanel.Select(view.GetRecipesRecursive().SelectMany(x => x.recipe.crafters).Distinct(), "Set assembler for all recipes", set =>
                     {
                         DataUtils.FavouriteCrafter.AddToFavourite(set, 10);
                         foreach (var recipe in view.GetRecipesRecursive())
@@ -318,7 +318,7 @@ namespace YAFC
 
                 if (gui.BuildButton("Mass set fuel") && gui.CloseDropdown())
                 {
-                    SelectObjectPanel.Select(Database.goods.all.Where(x => x.fuelValue > 0), "Set fuel for all recipes", set =>
+                    SelectObjectPanel.Select(view.GetRecipesRecursive().SelectMany(x => x.entity.energy.fuels).Distinct(), "Set fuel for all recipes", set =>
                     {
                         DataUtils.FavouriteFuel.AddToFavourite(set, 10);
                         foreach (var recipe in view.GetRecipesRecursive())
